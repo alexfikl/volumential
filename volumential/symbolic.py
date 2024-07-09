@@ -92,8 +92,7 @@ def math_func_mangler(target, name, arg_dtypes):
         fname = name.name
         if not (isinstance(name.aggregate, pmbl.primitives.Variable)
                 and name.aggregate.name == "math"):
-            raise RuntimeError("unexpected aggregate '%s'" %
-                    str(name.aggregate))
+            raise RuntimeError(f"unexpected aggregate '{name.aggregate}'")
 
         if arg_dtype.is_complex():
             if arg_dtype.numpy_dtype == np.complex64:
@@ -101,8 +100,7 @@ def math_func_mangler(target, name, arg_dtypes):
             elif arg_dtype.numpy_dtype == np.complex128:
                 tpname = "cdouble"
             else:
-                raise RuntimeError("unexpected complex type '%s'" %
-                        arg_dtype)
+                raise RuntimeError(f"unexpected complex type '{arg_dtype}'")
 
             return lp.CallMangleInfo(
                    target_name=f"{tpname}_{fname}",
@@ -111,7 +109,7 @@ def math_func_mangler(target, name, arg_dtypes):
 
         else:
             return lp.CallMangleInfo(
-                   target_name="%s" % fname,
+                   target_name=f"{fname}",
                    result_dtypes=(arg_dtype,),
                    arg_dtypes=(arg_dtype,))
 

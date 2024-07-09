@@ -71,7 +71,7 @@ extend-select = [
     "NPY",  # numpy
     "Q",    # flake8-quotes
     # "RUF",  # ruff
-    # "UP",   # pyupgrade
+    "UP",   # pyupgrade
     "W",    # pycodestyle
 ]
 extend-ignore = [

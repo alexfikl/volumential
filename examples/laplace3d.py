@@ -224,7 +224,7 @@ def main():
         with open("table_urls.json") as fp:
             urls = json.load(fp)
 
-        print("Downloading table from %s" % urls["Laplace3D"])
+        print("Downloading table from {}".format(urls["Laplace3D"]))
         import subprocess
         subprocess.call(["wget", "-q", urls["Laplace3D"], table_filename])
 

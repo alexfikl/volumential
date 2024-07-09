@@ -163,7 +163,7 @@ class FPNDSumpyExpansionWrangler(
             for out_knl in self.code.target_kernels:
                 if repr(out_knl) not in near_field_table:
                     raise RuntimeError(
-                            "Missing nearfield table for %s." % repr(out_knl))
+                            f"Missing nearfield table for {out_knl!r}.")
                 if isinstance(near_field_table[repr(out_knl)],
                         NearFieldInteractionTable):
                     near_field_table[repr(out_knl)] = [
@@ -740,7 +740,7 @@ class FPNDFMMLibExpansionWrangler(
             for out_knl in self.code.target_kernels:
                 if repr(out_knl) not in near_field_table:
                     raise RuntimeError(
-                            "Missing nearfield table for %s." % repr(out_knl))
+                            f"Missing nearfield table for {out_knl!r}.")
                 if isinstance(near_field_table[repr(out_knl)],
                         NearFieldInteractionTable):
                     near_field_table[repr(out_knl)] = [

@@ -1,8 +1,6 @@
 """ This example evaluates the volume potential and its derivatives
     over [-1,1]^3 with the Laplace kernel.
 """
-from __future__ import absolute_import, division, print_function
-
 
 __copyright__ = "Copyright (C) 2019 Xiaoyu Wei"
 

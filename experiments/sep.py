@@ -1,8 +1,6 @@
 """ This example evaluates the volume potential over
     [-1,1]^2 with the Laplace kernel.
 """
-from __future__ import absolute_import, division, print_function
-
 
 __copyright__ = "Copyright (C) 2017 - 2018 Xiaoyu Wei"
 
@@ -218,10 +216,10 @@ def main():
 
     if download_table and (not os.path.isfile(table_filename)):
         import json
-        with open("table_urls.json", "r") as fp:
+        with open("table_urls.json") as fp:
             urls = json.load(fp)
 
-        print("Downloading table from %s" % urls["Laplace2D"])
+        print("Downloading table from {}".format(urls["Laplace2D"]))
         import subprocess
         subprocess.call(["wget", "-q", urls["Laplace2D"], table_filename])
 

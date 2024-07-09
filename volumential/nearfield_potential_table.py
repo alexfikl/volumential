@@ -1192,8 +1192,9 @@ class NearFieldInteractionTable:
                     log_to = logger.warn
                 else:
                     log_to = logger.debug
-                log_to("the numerical error when computing the measure of a "
-                    "unit ball is %e" % arerr)
+                log_to(
+                    "the numerical error when computing the measure of a "
+                    "unit ball is %s", arerr)
 
             elif self.dim == 3:
                 arerr = np.abs(

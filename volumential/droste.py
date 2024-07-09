@@ -1507,7 +1507,7 @@ class DrosteReduced(DrosteBase):
             # Bn: the full n-dimensional hyperoctahedral group
             symmetry_info = "B%d" % self.dim
         else:
-            symmetry_info = "Span{%s}" % ",".join([
+            symmetry_info = "Span{%s}" % ",".join([  # noqa: UP031
                 repr(tag) for tag in
                 sorted(self.reduce_by_symmetry.symmetry_tags)
                 ])
@@ -1805,7 +1805,7 @@ class InverseDrosteReduced(DrosteReduced):
                 resknl = resknl.replace(
                         "PREPARE_BASIS_VALS",
                         "\n".join(basis_eval_insns + [
-                            "... nop {id=basis_evals,dep=%s}"
+                            "... nop {id=basis_evals,dep=%s}"  # noqa: UP031
                             % ":".join(
                                 ["basis%d" % i for i in range(self.dim)]
                                 + ["tgtbasis%d" % i for i in range(self.dim)]
@@ -1817,7 +1817,7 @@ class InverseDrosteReduced(DrosteReduced):
                 resknl = resknl.replace(
                         "PREPARE_BASIS_VALS",
                         "\n".join(basis_eval_insns + [
-                            "... nop {id=basis_evals,dep=%s}"
+                            "... nop {id=basis_evals,dep=%s}"  # noqa: UP031
                             % ":".join(
                                 ["basis%d" % i for i in range(self.dim)]
                                 ),
@@ -1879,7 +1879,7 @@ class InverseDrosteReduced(DrosteReduced):
                 resknl = resknl.replace(
                         "PREPARE_BASIS_VALS",
                         "\n".join(basis_eval_insns + [
-                            "... nop {id=basis_evals,dep=%s}"
+                            "... nop {id=basis_evals,dep=%s}"  # noqa: UP031
                             % ":".join(
                                 ["basis%d" % i for i in range(self.dim)]
                                 + ["tgtbasis%d" % i for i in range(self.dim)]
@@ -1900,7 +1900,7 @@ class InverseDrosteReduced(DrosteReduced):
                 resknl = resknl.replace(
                         "PREPARE_BASIS_VALS",
                         "\n".join(basis_eval_insns + [
-                            "... nop {id=basis_evals,dep=%s}"
+                            "... nop {id=basis_evals,dep=%s}"  # noqa: UP031
                             % ":".join(
                                 ["basis%d" % i for i in range(self.dim)]
                                 ),

@@ -60,7 +60,7 @@ master_doc = "index"
 
 # General information about the project.
 project = "Volumential"
-copyright = "%s, Xiaoyu Wei" % str(datetime.today().year)
+copyright = f"{datetime.today().year}, Xiaoyu Wei"
 author = "Xiaoyu Wei"
 
 # The version info for the project you're documenting, acts as replacement for

@@ -1,7 +1,4 @@
 # Use this script to pre-compute nftables
-from __future__ import absolute_import, division, print_function
-
-
 __copyright__ = "Copyright (C) 2017 - 2018 Xiaoyu Wei"
 
 __license__ = """

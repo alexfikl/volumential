@@ -656,8 +656,7 @@ class BoxSum(BoxSpecificReduction):
             assert filtering.shape == (self.degree**self.dim,)
             filter_multiplier = filtering
         else:
-            raise RuntimeError("Invalid filtering argument: %s"
-                    % str(filtering))
+            raise RuntimeError(f"Invalid filtering argument: {filtering}")
 
         knl = self.get_cached_optimized_kernel()
         n_boxes = traversal.target_boxes.shape[0]
