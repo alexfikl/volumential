@@ -153,9 +153,7 @@ class NearFieldFromCSR(NearFieldEvalBase):
     def codegen_compute_scaling(self, box_name="sbox"):
         """box_name: the name of the box whose extent is used.
         """
-        if ("infer_kernel_scaling" in self.extra_kwargs) and (
-            self.extra_kwargs["infer_kernel_scaling"]
-        ):
+        if self.extra_kwargs.get("infer_kernel_scaling"):
             # Laplace 2D
             if self.kname == "LapKnl2D":
                 logger.info("scaling for LapKnl2D")
@@ -216,9 +214,7 @@ class NearFieldFromCSR(NearFieldEvalBase):
             return "1.0"
 
     def codegen_compute_displacement(self, box_name="sbox"):
-        if ("infer_kernel_scaling" in self.extra_kwargs) and (
-            self.extra_kwargs["infer_kernel_scaling"]
-        ):
+        if self.extra_kwargs.get("infer_kernel_scaling"):
             # Laplace 2D
             if self.kname == "LapKnl2D":
                 logger.info("displacement for laplace 2D")
@@ -265,9 +261,7 @@ class NearFieldFromCSR(NearFieldEvalBase):
         return code.replace("BOX", box_name)
 
     def codegen_get_table_level(self, box_name="sbox"):
-        if ("infer_kernel_scaling" in self.extra_kwargs) and (
-            self.extra_kwargs["infer_kernel_scaling"]
-        ):
+        if self.extra_kwargs.get("infer_kernel_scaling"):
             if (
                 self.kname == "LapKnl2D"
                 or self.kname == "LapKnl3D"

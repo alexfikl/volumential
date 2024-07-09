@@ -90,7 +90,9 @@ def drive_volume_fmm(traversal, expansion_wrangler, src_weights, src_func,
     if src_func.ndim == 1:
         src_func = make_obj_array([src_func.astype(dtype)])
 
-    assert (ns := len(src_weights)) == len(src_func)
+    ns = len(src_weights)
+    assert ns == len(src_func)
+
     if ns > 1:
         raise NotImplementedError("Multiple outputs are not yet supported")
 
@@ -152,7 +154,7 @@ def drive_volume_fmm(traversal, expansion_wrangler, src_weights, src_func,
 
     # Return list 1 only, for debugging
     # 'list1_only' takes precedence over 'exclude_list1'
-    if "list1_only" in kwargs and kwargs["list1_only"]:
+    if kwargs.get("list1_only"):
 
         if reorder_potentials:
             logger.debug("reorder potentials")
@@ -168,7 +170,7 @@ def drive_volume_fmm(traversal, expansion_wrangler, src_weights, src_func,
         return result
 
     # Do not include list 1
-    if "exclude_list1" in kwargs and kwargs["exclude_list1"]:
+    if kwargs.get("exclude_list1"):
         logger.info("Using zeros for list 1")
         logger.warning("list 1 interactions are not included")
         potentials = wrangler.output_zeros()

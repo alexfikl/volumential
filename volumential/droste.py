@@ -258,13 +258,13 @@ class DrosteBase(KernelCacheWrapper):
     def get_sumpy_kernel_eval_insns(self):
         # actual integral kernel evaluation (within proper inames)
         knl_loopy_insns = self.get_sumpy_kernel_insns()
-        quad_inames = frozenset(
-            ["icase"]
-            + self.tgt_vars
-            + self.basis_vars
-            + ["ilevel", "ibrick_axis", "ibrick_side"]
-            + self.quad_vars
-        )
+        quad_inames = frozenset([
+            "icase",
+            *self.tgt_vars,
+            *self.basis_vars,
+            "ilevel", "ibrick_axis", "ibrick_side",
+            *self.quad_vars
+        ])
         quad_kernel_insns = [
             insn.copy(within_inames=insn.within_inames | quad_inames)
             for insn in knl_loopy_insns
@@ -280,7 +280,7 @@ class DrosteBase(KernelCacheWrapper):
             temp_var_type=lp.Optional(),
         )
 
-        return quad_kernel_insns + [scaling_assignment]
+        return [*quad_kernel_insns, scaling_assignment]
 
     def codegen_basis_eval(self, iaxis):
         """Generate instructions to evaluate Chebyshev polynomial basis.
@@ -685,7 +685,7 @@ class DrosteBase(KernelCacheWrapper):
 
     def postprocess_cheb_table(self, cheb_table, cheb_coefs):
         nfp_table = np.zeros(
-            [self.n_q_points, ] + list(cheb_table.shape[self.dim:]),
+            (self.n_q_points, *cheb_table.shape[self.dim:]),
             dtype=cheb_table.dtype)
 
         # transform to interpolatory basis functions
@@ -703,9 +703,11 @@ class DrosteBase(KernelCacheWrapper):
         # transform to self.data format (icase, source_id, target_id)
         # NOTE: the directions of target_id are reversed since cheb_table
         #       is indexed by, e.g. cheb_table[t2, t1, t0]
-        transpose_axes = (self.dim + 1, 0) + tuple(
-            self.dim - i for i in range(self.dim)
-        )
+        transpose_axes = (
+            self.dim + 1,
+            0,
+            *(self.dim - i for i in range(self.dim))
+            )
 
         return nfp_table.transpose(transpose_axes).reshape(-1, order="C")
 
@@ -780,9 +782,10 @@ class DrosteFull(DrosteBase):
                         + ["quad_order" for d in range(self.dim)]
                     )
                     + ", n_cases",
-                ), ]
-            + list(extra_kernel_kwarg_types)
-            + ["...", ],
+                ),
+                *extra_kernel_kwarg_types,
+                ...
+            ],
             name="brick_map",
             lang_version=(2018, 2),
         )
@@ -793,7 +796,7 @@ class DrosteFull(DrosteBase):
 
         try:
             loopy_knl = self.integral_knl.prepare_loopy_kernel(loopy_knl)
-        except Exception:  # noqa: B902
+        except Exception:
             pass
 
         return loopy_knl
@@ -1231,8 +1234,10 @@ class DrosteReduced(DrosteBase):
                             + ["quad_order" for d in range(self.dim)]
                         )
                         + ", n_cases",
-                    ), ] + list(extra_kernel_kwarg_types)
-                + ["...", ],
+                    ),
+                    *extra_kernel_kwarg_types,
+                    ...
+                ],
                 name="brick_map",
                 lang_version=(2018, 2),
             )
@@ -1250,8 +1255,10 @@ class DrosteReduced(DrosteBase):
                             + ["quad_order" for d in range(self.dim)]
                         )
                         + ", n_cases",
-                    ), ] + list(extra_kernel_kwarg_types)
-                + ["...", ],
+                    ),
+                    *extra_kernel_kwarg_types,
+                    ...
+                ],
                 name="brick_map_expansion",
                 lang_version=(2018, 2),
             )
@@ -1265,7 +1272,7 @@ class DrosteReduced(DrosteBase):
 
         try:
             loopy_knl = self.integral_knl.prepare_loopy_kernel(loopy_knl)
-        except Exception:  # noqa: B902
+        except Exception:
             pass
 
         return loopy_knl
@@ -1360,7 +1367,7 @@ class DrosteReduced(DrosteBase):
         self.get_kernel_id = 0
         try:
             delattr(self, "_memoize_dic_get_cached_optimized_kernel")
-        except Exception:  # noqa: B902
+        except Exception:
             pass
         knl = self.get_cached_optimized_kernel()
         _, res = knl(
@@ -1378,7 +1385,7 @@ class DrosteReduced(DrosteBase):
         self.get_kernel_id = 1
         try:
             delattr(self, "_memoize_dic_get_cached_optimized_kernel")
-        except Exception:  # noqa: B902
+        except Exception:
             pass
         knl2 = self.get_cached_optimized_kernel()
         _, res2 = knl2(
@@ -1804,23 +1811,25 @@ class InverseDrosteReduced(DrosteReduced):
 
                 resknl = resknl.replace(
                         "PREPARE_BASIS_VALS",
-                        "\n".join(basis_eval_insns + [
+                        "\n".join([
+                            *basis_eval_insns,
                             "... nop {id=basis_evals,dep=%s}"  # noqa: UP031
-                            % ":".join(
-                                ["basis%d" % i for i in range(self.dim)]
-                                + ["tgtbasis%d" % i for i in range(self.dim)]
-                                + ["tgtd2basis%d" % i for i in range(self.dim)]
+                                % ":".join(
+                                    ["basis%d" % i for i in range(self.dim)]
+                                    + ["tgtbasis%d" % i for i in range(self.dim)]
+                                    + ["tgtd2basis%d" % i for i in range(self.dim)]
                                 ),
                             ])
                         )
             else:
                 resknl = resknl.replace(
                         "PREPARE_BASIS_VALS",
-                        "\n".join(basis_eval_insns + [
+                        "\n".join([
+                            *basis_eval_insns,
                             "... nop {id=basis_evals,dep=%s}"  # noqa: UP031
-                            % ":".join(
-                                ["basis%d" % i for i in range(self.dim)]
-                                ),
+                                % ":".join(
+                                    ["basis%d" % i for i in range(self.dim)]
+                                    ),
                             ])
                         )
 
@@ -1878,12 +1887,13 @@ class InverseDrosteReduced(DrosteReduced):
                 # u(x) - u(y)
                 resknl = resknl.replace(
                         "PREPARE_BASIS_VALS",
-                        "\n".join(basis_eval_insns + [
+                        "\n".join([
+                            *basis_eval_insns,
                             "... nop {id=basis_evals,dep=%s}"  # noqa: UP031
-                            % ":".join(
-                                ["basis%d" % i for i in range(self.dim)]
-                                + ["tgtbasis%d" % i for i in range(self.dim)]
-                                ),
+                                % ":".join(
+                                    ["basis%d" % i for i in range(self.dim)]
+                                    + ["tgtbasis%d" % i for i in range(self.dim)]
+                                    ),
                             ])
                         )
                 resknl = resknl.replace(
@@ -1899,11 +1909,12 @@ class InverseDrosteReduced(DrosteReduced):
                 # - u(y)
                 resknl = resknl.replace(
                         "PREPARE_BASIS_VALS",
-                        "\n".join(basis_eval_insns + [
+                        "\n".join([
+                            *basis_eval_insns,
                             "... nop {id=basis_evals,dep=%s}"  # noqa: UP031
-                            % ":".join(
-                                ["basis%d" % i for i in range(self.dim)]
-                                ),
+                                % ":".join(
+                                    ["basis%d" % i for i in range(self.dim)]
+                                    ),
                             ])
                         )
                 resknl = resknl.replace(
@@ -1994,8 +2005,10 @@ class InverseDrosteReduced(DrosteReduced):
                             + ["quad_order" for d in range(self.dim)]
                         )
                         + ", n_cases",
-                    ), ] + list(extra_kernel_kwarg_types)
-                + ["...", ],
+                    ),
+                    *extra_kernel_kwarg_types,
+                    ...
+                ],
                 name="brick_map_%d" % self.get_kernel_id,
                 lang_version=(2018, 2),
                 **extra_loopy_kernel_kwargs
@@ -2014,8 +2027,10 @@ class InverseDrosteReduced(DrosteReduced):
                             + ["quad_order" for d in range(self.dim)]
                         )
                         + ", n_cases",
-                    ), ] + list(extra_kernel_kwarg_types)
-                + ["...", ],
+                    ),
+                    *extra_kernel_kwarg_types,
+                    ...
+                ],
                 name="brick_map_expansion",
                 lang_version=(2018, 2),
                 **extra_loopy_kernel_kwargs
@@ -2032,7 +2047,7 @@ class InverseDrosteReduced(DrosteReduced):
 
         try:
             loopy_knl = self.integral_knl.prepare_loopy_kernel(loopy_knl)
-        except Exception:  # noqa: B902
+        except Exception:
             pass
 
         return loopy_knl
@@ -2132,7 +2147,7 @@ class InverseDrosteReduced(DrosteReduced):
         self.get_kernel_id = 0
         try:
             delattr(self, "_memoize_dic_get_cached_optimized_kernel")
-        except Exception:  # noqa: B902
+        except Exception:
             pass
         knl = self.get_cached_optimized_kernel()
         result_array_0 = self.make_result_array(**kwargs)
@@ -2155,7 +2170,7 @@ class InverseDrosteReduced(DrosteReduced):
         self.get_kernel_id = 1
         try:
             delattr(self, "_memoize_dic_get_cached_optimized_kernel")
-        except Exception:  # noqa: B902
+        except Exception:
             pass
         result_array_1 = self.make_result_array(**kwargs)
         knl = self.get_cached_optimized_kernel()
@@ -2178,7 +2193,7 @@ class InverseDrosteReduced(DrosteReduced):
         self.get_kernel_id = 2
         try:
             delattr(self, "_memoize_dic_get_cached_optimized_kernel")
-        except Exception:  # noqa: B902
+        except Exception:
             pass
         knl2 = self.get_cached_optimized_kernel()
         result_array = res0["result"] + res1["result"]

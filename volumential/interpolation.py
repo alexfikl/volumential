@@ -682,7 +682,7 @@ def interpolate_from_meshmode(actx, dof_vec, elements_to_sources_lookup,
     dof_vec_view = dof_vec_view.get()
 
     sym_shape = dof_vec.shape[:-1]
-    source_vec = np.zeros(sym_shape + (tree.nsources, ))
+    source_vec = np.zeros((*sym_shape, tree.nsources))
 
     for iel in range(degroup.nelements):
         beg = sources_in_element_starts[iel]
@@ -704,7 +704,7 @@ def interpolate_from_meshmode(actx, dof_vec, elements_to_sources_lookup,
         else:
             from pytools import indices_in_shape
             for sym_id in indices_in_shape(sym_shape):
-                source_vec[sym_id + (source_ids_in_el, )] = \
+                source_vec[(*sym_id, source_ids_in_el)] = \
                     rsplm @ local_dof_vec[sym_id]
 
     source_vec = cl.array.to_device(actx.queue, source_vec)

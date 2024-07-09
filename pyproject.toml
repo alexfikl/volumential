@@ -70,7 +70,7 @@ extend-select = [
     "N",    # pep8-naming
     "NPY",  # numpy
     "Q",    # flake8-quotes
-    # "RUF",  # ruff
+    "RUF",  # ruff
     "UP",   # pyupgrade
     "W",    # pycodestyle
 ]

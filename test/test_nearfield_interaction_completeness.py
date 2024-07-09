@@ -27,7 +27,7 @@ from functools import partial
 import numpy as np
 
 import pyopencl as cl
-import pyopencl.array  # noqa: F401
+import pyopencl.array
 
 
 def drive_test_completeness(ctx, queue, dim, q_order):

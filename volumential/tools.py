@@ -205,18 +205,15 @@ class ScalarFieldExpressionEvaluation(KernelCacheWrapper):
         ]
 
         loopy_knl = lp.make_kernel(
-            "{ [itgt]: 0<=itgt<n_targets }",
-            [
+            "{ [itgt]: 0<=itgt<n_targets }", [
                 """
                 for itgt
                     VAR_ASSIGNMENT
                 end
                 """.replace(
                     "VAR_ASSIGNMENT", self.get_variable_assignment_code()
-                )
-            ]
-            + eval_insns
-            + [
+                ),
+                *eval_insns,
                 """
                 for itgt
                     result[itgt] = expr_val
@@ -227,9 +224,9 @@ class ScalarFieldExpressionEvaluation(KernelCacheWrapper):
                 lp.ValueArg("dim, n_targets", np.int32),
                 lp.GlobalArg("target_points", np.float64, "dim, n_targets"),
                 lp.TemporaryVariable("expr_val", None, ()),
-            ]
-            + list(extra_kernel_kwarg_types)
-            + ["...", ],
+                *extra_kernel_kwarg_types,
+                ...
+            ],
             name="eval_expr",
             lang_version=(2018, 2),
         )
@@ -402,9 +399,7 @@ class DiscreteLegendreTransform(BoxSpecificMap):
         assert self.W.shape == (self.degree**self.dim,)
 
         # Normalizers
-        self.I = np.ascontiguousarray(  # noqa: E741
-                np.diag(
-                    (self.V.T * self.W) @ self.V))
+        self.I = np.ascontiguousarray(np.diag((self.V.T * self.W) @ self.V))
         assert self.I.shape == (self.degree**self.dim,)
 
         # Fix strides for loopy
@@ -513,7 +508,7 @@ class DiscreteLegendreTransform(BoxSpecificMap):
             assert filtering.shape == (self.degree**self.dim,)
             filter_multiplier = filtering
         else:
-            raise RuntimeError(f"Invalid filtering argument: {str(filtering)}")
+            raise RuntimeError(f"Invalid filtering argument: {filtering}")
 
         knl = self.get_cached_optimized_kernel()
 

@@ -1246,8 +1246,7 @@ class NearFieldInteractionTable:
             extra_kernel_kwarg_types = kwargs["extra_kernel_kwarg_types"]
 
         lpknl = lp.make_kernel(
-            "{ [iqpt, iaxis]: 0<=iqpt<n_q_points and 0<=iaxis<dim }",
-            [
+            "{ [iqpt, iaxis]: 0<=iqpt<n_q_points and 0<=iaxis<dim }", [
                 """
                 for iqpt
                     for iaxis
@@ -1255,23 +1254,22 @@ class NearFieldInteractionTable:
                             - target_point[iaxis])
                     end
                 end
-                """
-            ]
-            + eval_kernel_insns
-            + [scaling_assignment]
-            + [
+                """,
+                *eval_kernel_insns,
+                *scaling_assignment,
                 """
                 for iqpt
                     result[iqpt] = knl_val * knl_scaling
                 end
                 """
-                ],
+            ],
             [
                 lp.ValueArg("dim, n_q_points", np.int32),
                 lp.GlobalArg("quad_points", np.float64, "dim, n_q_points"),
-                lp.GlobalArg("target_point", np.float64, "dim")
-                ] + list(extra_kernel_kwarg_types)
-            + ["...", ],
+                lp.GlobalArg("target_point", np.float64, "dim"),
+                *extra_kernel_kwarg_types,
+                ...
+            ],
             name="eval_kernel_lucky_coin",
             lang_version=(2018, 2),
         )
