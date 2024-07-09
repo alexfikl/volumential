@@ -38,14 +38,8 @@ gmsh = [
     "gmsh_interop>=2024.1",
 ]
 test = [
-    "flake8",
-    "isort",
-    "flake8-isort",
-    "flake8-bugbear",
-    "flake8-comprehensions",
-    "flake8-pyproject",
-    "pep8-naming",
     "pytest",
+    "ruff",
 ]
 doc = [
     "sphinx-rtd-theme",
