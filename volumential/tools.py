@@ -96,14 +96,16 @@ class KernelCacheWrapper:
 
             try:
                 result = code_cache[cache_key]
-                logger.debug(f"{self.name}: kernel cache hit [key={cache_key}]")
+                logger.debug("%s: kernel cache hit [key=%s]",
+                             self.name, cache_key)
                 return result
             except KeyError:
                 pass
 
-        logger.info("%s: kernel cache miss" % self.name)
+        logger.info("%s: kernel cache miss", self.name)
         if CACHING_ENABLED:
-            logger.info(f"{self.name}: kernel cache miss [key={cache_key}]")
+            logger.info("%s: kernel cache miss [key=%s]",
+                        self.name, cache_key)
 
         from pytools import MinRecursionLimit
         with MinRecursionLimit(3000):
@@ -412,8 +414,8 @@ class DiscreteLegendreTransform(BoxSpecificMap):
         ortho_resid = np.linalg.norm(
                 self.V.T * np.matmul(self.W, self.V) - np.diag(self.I))
         if ortho_resid > 1e-13:
-            logger.warn("Legendre polynomials' orthogonality residual = %f"
-                    % ortho_resid)
+            logger.warning("Legendre polynomials' orthogonality residual = %f",
+                           ortho_resid)
 
         self.name = "DiscreteLegendreTransform"
 

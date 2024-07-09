@@ -55,7 +55,7 @@ def main():
     download_table = True
     table_filename = "nft_laplace3d.hdf5"
 
-    logger.info("Using table cache: " + table_filename)
+    logger.info("Using table cache: %s", table_filename)
 
     q_order = 7  # quadrature order
     n_levels = 5
@@ -72,9 +72,9 @@ def main():
     m_order = 10  # multipole order
     force_direct_evaluation = False
 
-    logger.info("Multipole order = " + str(m_order))
-    logger.info("Quad order = " + str(q_order))
-    logger.info("N_levels = " + str(n_levels))
+    logger.info("Multipole order = %d", m_order)
+    logger.info("Quad order = %d", q_order)
+    logger.info("N_levels = %d", n_levels)
 
     # a solution that is nearly zero at the boundary
     # exp(-40) = 4.25e-18
@@ -88,8 +88,8 @@ def main():
     source_expr = -(4 * alpha ** 2 * norm2 - 6 * alpha) * expp(-alpha * norm2)
     solu_expr = expp(-alpha * norm2)
 
-    logger.info("Source expr: " + str(source_expr))
-    logger.info("Solu expr: " + str(solu_expr))
+    logger.info("Source expr: %s", source_expr)
+    logger.info("Solu expr: %s", solu_expr)
 
     # bounding box
     a = -0.5

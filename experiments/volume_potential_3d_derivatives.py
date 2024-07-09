@@ -53,7 +53,7 @@ print("*************************")
 dim = 3
 table_filename = "nft_laplace3d.hdf5"
 
-logger.info("Using table cache: " + table_filename)
+logger.info("Using table cache: %s", table_filename)
 
 q_order = 2  # quadrature order
 n_levels = 7  # 2^(n_levels-1) subintervals in 1D, must be at least 2 if not adaptive
@@ -70,9 +70,9 @@ dtype = np.float64
 m_order = 15  # multipole order
 force_direct_evaluation = False
 
-logger.info("Multipole order = " + str(m_order))
-logger.info("Quad order = " + str(q_order))
-logger.info("N_levels = " + str(n_levels))
+logger.info("Multipole order = %d", m_order)
+logger.info("Quad order = %d", q_order)
+logger.info("N_levels = %d", n_levels)
 
 # a solution that is nearly zero at the boundary
 # exp(-40) = 4.25e-18
@@ -89,8 +89,8 @@ solu_dx_expr = (-alpha) * solu_expr * (2*x)
 solu_dy_expr = (-alpha) * solu_expr * (2*y)
 solu_dz_expr = (-alpha) * solu_expr * (2*z)
 
-logger.info("Source expr: " + str(source_expr))
-logger.info("Solu expr: " + str(solu_expr))
+logger.info("Source expr: %s", source_expr)
+logger.info("Solu expr: %s", solu_expr)
 
 # bounding box
 a = -0.5

@@ -412,8 +412,7 @@ class FPNDSumpyExpansionWrangler(
 
         self.queue.finish()
         logger.info(
-                "table data for kernel "
-                + out_kernel.__repr__() + " congregated")
+                "table data for kernel %r congregated", out_kernel)
 
         # The loop domain needs to know some info about the tables being used
         table_data_shapes = {
@@ -1033,8 +1032,7 @@ class FPNDFMMLibExpansionWrangler(
                 self.near_field_table[kname][lev].kernel_exterior_normalizers
 
         logger.info(
-                "Table data for kernel "
-                + out_kernel.__repr__() + " congregated")
+                "Table data for kernel %r congregated", out_kernel)
 
         # The loop domain needs to know some info about the tables being used
         table_data_shapes = {

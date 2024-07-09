@@ -695,8 +695,7 @@ class NearFieldInteractionTable:
         )
         # FIXME: cannot pickle logger
         if err > 1e-15:
-            logger.debug("Normalizer %d quad error is %e" % (
-                mode_id, err))
+            logger.debug("Normalizer %d quad error is %e", mode_id, err)
         return (mode_id, nmlz)
 
     def build_normalizer_table(self, pool=None, pb=None):
@@ -869,7 +868,7 @@ class NearFieldInteractionTable:
                 knl_symmetry_tags = kwargs["knl_symmetry_tags"]
             else:
                 # Maximum symmetry by default
-                logger.warn(
+                logger.warning(
                         "use_symmetry is set to True, but knl_symmetry_tags is not "
                         "set. Using the default maximum symmetry. (Using maximum "
                         "symmetry for some kernels (e.g. derivatives of "
@@ -902,7 +901,7 @@ class NearFieldInteractionTable:
         missing_measure = 1
         if adaptive_level:
             table_tol = np.finfo(self.dtype).eps * 256  # 5e-14 for float64
-            logger.warn("Searching for nlevels since adaptive_level=True")
+            logger.warning("Searching for nlevels since adaptive_level=True")
 
             while True:
 
@@ -910,10 +909,10 @@ class NearFieldInteractionTable:
                         alpha ** nlev * self.source_box_extent
                         ) ** self.dim
                 if missing_measure < np.finfo(self.dtype).eps * 128:
-                    logger.warn(
+                    logger.warning(
                             "Adaptive level refinement terminated "
                             "at %d since missing measure is minuscule "
-                            "(%e)" % (nlev, missing_measure))
+                            "(%e)", nlev, missing_measure)
                     break
 
                 nlev = nlev + 1
@@ -926,21 +925,20 @@ class NearFieldInteractionTable:
                 data0 = data1
 
                 if abs(resid) < table_tol:
-                    logger.warn(
+                    logger.warning(
                         "Adaptive level refinement "
-                        "converged at level %d with residual %e" % (
-                            nlev - 1, resid))
+                        "converged at level %d with residual %e", nlev - 1, resid)
                     break
 
                 if np.isnan(resid):
-                    logger.warn(
+                    logger.warning(
                         "Adaptive level refinement terminated "
-                        "at %d before converging due to NaNs" % nlev)
+                        "at %d before converging due to NaNs", nlev)
                     break
 
             if resid >= table_tol:
-                logger.warn("Adaptive level refinement failed to converge.")
-                logger.warn(f"Residual at level {nlev} equals to {resid}")
+                logger.warning("Adaptive level refinement failed to converge.")
+                logger.warning("Residual at level %s equals to %s", nlev, resid)
 
         # }}} End adaptively determine number of levels
 
@@ -948,10 +946,10 @@ class NearFieldInteractionTable:
 
         if adaptive_quadrature:
             table_tol = np.finfo(self.dtype).eps * 256  # 5e-14 for float64
-            logger.warn("Searching for n_brick_quad_points since "
-                        "adaptive_quadrature=True. Note that if you are using "
-                        "special radial quadrature, the radial order will also be "
-                        "adaptively refined.")
+            logger.warning("Searching for n_brick_quad_points since "
+                           "adaptive_quadrature=True. Note that if you are using "
+                           "special radial quadrature, the radial order will also be "
+                           "adaptively refined.")
 
             max_n_quad_pts = 1000
             resid = np.inf
@@ -962,21 +960,20 @@ class NearFieldInteractionTable:
                 if special_radial_brick_quadrature:
                     nradial_brick_quad_points += max(
                         int(nradial_brick_quad_points * 0.2), 3)
-                    logger.warn(
-                        f"Trying n_brick_quad_points = {n_brick_quad_points}, "
-                        f"nradial_brick_quad_points = {nradial_brick_quad_points}, "
-                        f"resid = {resid}")
+                    logger.warning(
+                        "Trying n_brick_quad_points = %s, "
+                        "nradial_brick_quad_points = %s, resid = %s",
+                        n_brick_quad_points, nradial_brick_quad_points, resid)
                 else:
-                    logger.warn(
-                        f"Trying n_brick_quad_points = {n_brick_quad_points}, "
-                        f"resid = {resid}")
+                    logger.warning(
+                        "Trying n_brick_quad_points = %s, resid = %s",
+                        n_brick_quad_points, resid)
                 if n_brick_quad_points > max_n_quad_pts:
-                    logger.warn(
+                    logger.warning(
                             "Adaptive quadrature refinement terminated "
                             "since order %d exceeds the max order "
-                            "allowed (%d)" % (
-                                n_brick_quad_points - 1,
-                                max_n_quad_pts - 1))
+                            "allowed (%d)",
+                            n_brick_quad_points - 1, max_n_quad_pts - 1)
                     break
 
                 drf = self.get_droste_table_builder(
@@ -994,29 +991,28 @@ class NearFieldInteractionTable:
                 data0 = data1
 
                 if resid < table_tol:
-                    logger.warn(
-                        "Adaptive quadrature "
-                        "converged at order %d with residual %e" % (
-                            n_brick_quad_points - 1, resid))
+                    logger.warning(
+                        "Adaptive quadrature converged at order %d with residual %e",
+                        n_brick_quad_points - 1, resid)
                     break
 
                 if resid > resid_prev:
-                    logger.warn("Non-monotonic residual, breaking..")
+                    logger.warning("Non-monotonic residual, breaking..")
                     break
 
                 if np.isnan(resid):
-                    logger.warn(
+                    logger.warning(
                         "Adaptive quadrature terminated "
-                        "at %d before converging due to NaNs" % nlev)
+                        "at %d before converging due to NaNs", nlev)
                     break
 
             if resid >= table_tol:
-                logger.warn("Adaptive quadrature failed to converge.")
-                logger.warn(f"Residual at order {n_brick_quad_points} "
-                            f"equals to {resid}")
+                logger.warning("Adaptive quadrature failed to converge.")
+                logger.warning("Residual at order %s equals to %s",
+                               n_brick_quad_points, resid)
 
             if resid < 0:
-                logger.warn("Failed to perform quadrature order refinement.")
+                logger.warning("Failed to perform quadrature order refinement.")
 
         # }}} End adaptively determine brick quad order
 
@@ -1075,7 +1071,7 @@ class NearFieldInteractionTable:
 
         where :math:`B` is the source box :math:`[0, source_box_extent]^dim`.
         """
-        logger.warn("this method is currently under construction.")
+        logger.warning("this method is currently under construction.")
 
         if not self.inverse_droste:
             raise ValueError()
@@ -1136,7 +1132,7 @@ class NearFieldInteractionTable:
         hs = self.source_box_extent / 2
         # radius of bouding sphere
         r = hs * np.sqrt(self.dim)
-        logger.debug(f"r_inner = {hs:f}, r_outer = {r:f}")
+        logger.debug("r_inner = %f, r_outer = %f", hs, r)
 
         if self.dim == 2:
             tag_box = gmsh.model.occ.addRectangle(x=0, y=0, z=0,
@@ -1208,8 +1204,9 @@ class NearFieldInteractionTable:
                     log_to = logger.warn
                 else:
                     log_to = logger.debug
-                logger.warn("The numerical error when computing the measure of a "
-                    "unit ball is %e" % arerr)
+                logger.warning(
+                    "The numerical error when computing the measure of a "
+                    "unit ball is %e", arerr)
 
         # }}} End optional checks
 
@@ -1345,8 +1342,8 @@ class NearFieldInteractionTable:
                         - radius**(-2 * s) * 2 * np.pi * (1 / (2 * s)) * scaling
                         ) / (radius**(-2 * s) * 2 * np.pi * (1 / (2 * s)) * scaling)
                 if test_err > 1e-12:
-                    logger.warn(
-                            "Error evaluating at origin = %f" % test_err)
+                    logger.warning(
+                            "Error evaluating at origin = %f", test_err)
 
             for tid, target in enumerate(self.q_points):
                 # The formula assumes that the source box is centered at origin

@@ -93,8 +93,8 @@ def main():
     source_expr = -(4 * alpha ** 2 * norm2 - 4 * alpha) * expp(-alpha * norm2)
     solu_expr = expp(-alpha * norm2)
 
-    logger.info("Source expr: " + str(source_expr))
-    logger.info("Solu expr: " + str(solu_expr))
+    logger.info("Source expr: %s", source_expr)
+    logger.info("Solu expr: %s", solu_expr)
 
     # bounding box
     a = -0.5

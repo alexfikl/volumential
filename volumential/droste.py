@@ -838,8 +838,8 @@ class DrosteFull(DrosteBase):
             nlevels = kwargs["nlevels"]
             assert nlevels > 0
             if nlevels > 1 and self.special_radial_quadrature:
-                logger.warn("When using tanh-sinh quadrature in the radial "
-                            "direction, it is often best to use a single level.")
+                logger.warning("When using tanh-sinh quadrature in the radial "
+                               "direction, it is often best to use a single level.")
         else:
             # Single level is equivalent to Duffy transform
             nlevels = 1
@@ -948,8 +948,8 @@ class DrosteReduced(DrosteBase):
 
         self.reduce_by_symmetry = CaseVecReduction(case_vecs, knl_symmetry_tags)
         logger.info(
-            "Reduction ratio by symmetry = "
-            + str(self.reduce_by_symmetry.get_full_reduction_ratio())
+            "Reduction ratio by symmetry = %s",
+            self.reduce_by_symmetry.get_full_reduction_ratio()
         )
 
         self.nbcases = len(self.reduce_by_symmetry.reduced_vecs)
@@ -1324,9 +1324,9 @@ class DrosteReduced(DrosteBase):
         missing_measure = (alpha ** nlevels * source_box_extent) ** self.dim
         if abs(missing_measure) > 1e-6:
 
-            logger.warn(
-                "Droste probably has too few levels, missing measure = %e"
-                % missing_measure
+            logger.warning(
+                "Droste probably has too few levels, missing measure = %e",
+                missing_measure
             )
 
         if "result_array" in kwargs:
@@ -2075,20 +2075,20 @@ class InverseDrosteReduced(DrosteReduced):
         delta_max = min(np.min(tt), source_box_extent - np.max(tt))
         assert delta_max > 0
         if delta_max < 1e-6:
-            logger.warn("Severe delta constraint (< %f)" % delta_max)
+            logger.warning("Severe delta constraint (< %f)", delta_max)
 
         if ("delta" in kwargs) and (not self.auto_windowing):
             delta = kwargs["delta"]
-            logger.info("Using window radius %f" % delta)
+            logger.info("Using window radius %f", delta)
             assert delta > 0 and 2 * delta < source_box_extent
         else:
             assert self.auto_windowing
             delta = 0.9 * delta_max
-            logger.info("Using auto-determined window radius %f" % delta)
+            logger.info("Using auto-determined window radius %f", delta)
 
         if delta > delta_max:
             delta = min(delta, delta_max)
-            logger.info("Shrinked delta to %f to fit inside the source box" % delta)
+            logger.info("Shrinked delta to %f to fit inside the source box", delta)
 
         if "nlevels" in kwargs:
             nlevels = kwargs["nlevels"]

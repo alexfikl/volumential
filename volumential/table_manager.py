@@ -550,7 +550,7 @@ class NearFieldInteractionTableManager:
         """Update stored data.
         """
         if data_array is None:
-            logger.debug("No data to save for %s" % dataset_name)
+            logger.debug("No data to save for %s", dataset_name)
             return
 
         data_array = np.array(data_array)

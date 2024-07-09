@@ -163,14 +163,14 @@ def drive_volume_fmm(traversal, expansion_wrangler, src_weights, src_func,
 
         logger.info("fmm complete with list 1 only")
         logger.info("fmm complete")
-        logger.warn("only list 1 results are returned")
+        logger.warning("only list 1 results are returned")
 
         return result
 
     # Do not include list 1
     if "exclude_list1" in kwargs and kwargs["exclude_list1"]:
         logger.info("Using zeros for list 1")
-        logger.warn("list 1 interactions are not included")
+        logger.warning("list 1 interactions are not included")
         potentials = wrangler.output_zeros()
 
     # these potentials are called alpha in [1]

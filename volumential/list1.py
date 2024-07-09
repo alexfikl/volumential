@@ -194,7 +194,7 @@ class NearFieldFromCSR(NearFieldEvalBase):
                         (table_root_extent * table_root_extent * table_root_extent)"
 
             else:
-                logger.warn(
+                logger.warning(
                     "Kernel not scalable and not using multiple tables, "
                     "to get correct results, please make sure that your "
                     "tree is uniform and only needs one table."
@@ -211,7 +211,7 @@ class NearFieldFromCSR(NearFieldEvalBase):
                         )
             return self.extra_kwargs["kernel_scaling_code"]
         else:
-            logger.info("not scaling for " + self.kname)
+            logger.info("not scaling for %s", self.kname)
             logger.info("(using multiple tables)")
             return "1.0"
 
@@ -241,7 +241,7 @@ class NearFieldFromCSR(NearFieldEvalBase):
                 logger.info("no displacement for CstKnl3D")
                 code = "0.0"
             else:
-                logger.warn(
+                logger.warning(
                     "Kernel not scalable and not using multiple tables, "
                     "to get correct results, please make sure that either "
                     "no displacement is needed, or the box "
@@ -258,7 +258,7 @@ class NearFieldFromCSR(NearFieldEvalBase):
                         )
             code = self.extra_kwargs["kernel_displacement_code"]
         else:
-            logger.info("no displacement for " + self.kname)
+            logger.info("no displacement for %s", self.kname)
             logger.info("(using multiple tables)")
             code = "0.0"
 
@@ -274,10 +274,10 @@ class NearFieldFromCSR(NearFieldEvalBase):
                 or self.kname == "CstKnl2D"
                 or self.kname == "CstKnl3D"
             ):
-                logger.info("scaling from table[0] for " + self.kname)
+                logger.info("scaling from table[0] for %s", self.kname)
                 code = "0.0"
             else:
-                logger.warn(
+                logger.warning(
                     "Kernel not scalable and not using multiple tables, "
                     "to get correct results, please make sure that your "
                     "tree is uniform and only needs one table."
