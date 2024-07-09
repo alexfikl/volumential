@@ -1,0 +1,107 @@
+[build-system]
+build-backend = "setuptools.build_meta"
+requires = [
+    "setuptools>=63",
+]
+
+[project]
+name = "volumential"
+version = "2017.1"
+description = "Volume potential computation powered by FMM"
+readme = "README.md"
+authors = [
+    { name = "Xiaoyu Wei", email = "wxy0516@gmail.com" },
+]
+requires-python = ">=3.8"
+license = { text = "MIT" }
+classifiers = [
+    "Development Status :: 3 - Alpha",
+    "Intended Audience :: Developers",
+    "Intended Audience :: Science/Research",
+    "License :: OSI Approved :: MIT License",
+    "Natural Language :: English",
+    "Programming Language :: Python",
+    "Topic :: Scientific/Engineering",
+    "Topic :: Scientific/Engineering :: Information Analysis",
+    "Topic :: Scientific/Engineering :: Mathematics",
+    "Topic :: Scientific/Engineering :: Visualization",
+    "Topic :: Software Development :: Libraries",
+    "Topic :: Utilities",
+]
+dependencies = [
+    "pytential>=2020.2",
+    "h5py>=3.10",
+]
+
+[project.optional-dependencies]
+gmsh = [
+    "gmsh_interop>=2024.1",
+]
+test = [
+    "flake8",
+    "isort",
+    "flake8-isort",
+    "flake8-bugbear",
+    "flake8-comprehensions",
+    "flake8-pyproject",
+    "pep8-naming",
+    "pytest",
+]
+doc = [
+    "sphinx-rtd-theme",
+    "sphinx>=4",
+]
+
+[project.urls]
+Documentation = "https://xiaoyu-wei.com/docs/volumential"
+Repository = "https://github.com/xywei/volumential"
+
+[tool.setuptools.packages.find]
+include = [
+    "volumential*",
+]
+
+[tool.flake8]
+max-line-length = 85
+inline-quotes = "double"
+docstring-quotes = "double"
+multiline-quotes = "double"
+select = [
+    "B", # flake8-bugbear
+    "C", # flake8-comprehensions
+    "E", # pycodestyle
+    "F", # pyflakes
+    "N", # pep8-naming
+    "Q", # flake8-quotes
+    "W", # pycodestyle
+]
+extend-ignore = [
+    "E123", # closing bracket does not match indentation
+    "E126", # continuation line over-indented
+    "E127", # continuation line over-indented
+    "E128", # continuation line under-indented
+    "E226", # missing whitespace around arithmetic operator
+    "E241", # multiple spaces after comma
+    "E242", # tab after comma
+    "E265", # comment should have a space
+    "E402", # module level import not at the top of file
+    "W503", # line break before a binary operator
+]
+
+[tool.isort]
+known_firstparty = [
+    "pytools",
+    "pyopencl",
+    "loopy",
+    "modepy",
+    "pymbolic",
+    "boxtree",
+    "pytential",
+    "sumpy",
+    "meshmode",
+]
+known_local_folder = "volumential"
+line_length = 85
+lines_after_imports = 2
+combine_as_imports = true
+multi_line_output = 4
