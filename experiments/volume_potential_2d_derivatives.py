@@ -38,9 +38,6 @@ else:
 
 import numpy as np
 import pyopencl as cl
-import boxtree as bt
-import sumpy as sp
-import volumential as vm
 
 from functools import partial
 
@@ -95,7 +92,6 @@ if 0:
     # analytical solution, up to a harmonic function
     def exact_solu(x, y):
         return 0.25 * (x ** 2 + y ** 2)
-
 
 else:
     # a solution that is nearly zero at the boundary
@@ -241,7 +237,6 @@ trav, _ = tg(queue, tree)
 # {{{ build near field potential table
 
 from volumential.table_manager import NearFieldInteractionTableManager
-from volumential.list1_symmetry import Flip
 
 tm = NearFieldInteractionTableManager(
     table_filename, root_extent=root_table_source_extent
@@ -262,29 +257,29 @@ if use_multilevel_table:
     nftable_list = []
     nftable_dx_list = []
     nftable_dy_list = []
-    for l in range(0, tree.nlevels + 1):
+    for level in range(0, tree.nlevels + 1):
         if 1:
-            print("Getting table at level", l)
+            print("Getting table at level", level)
             tb, _ = tm.get_table(dim, "Laplace", q_order,
-                source_box_level=l, compute_method="DrosteSum",
+                source_box_level=level, compute_method="DrosteSum",
                 queue=queue, n_brick_quad_points=100,
                 adaptive_level=False, use_symmetry=True,
                 alpha=0.1, nlevels=n_brick_levels)
             nftable_list.append(tb)
 
         if 1:
-            print("Getting table Dx at level", l)
+            print("Getting table Dx at level", level)
             tb, _ = tm.get_table(dim, "Laplace-Dx", q_order,
-                source_box_level=l, compute_method="DrosteSum",
+                source_box_level=level, compute_method="DrosteSum",
                 queue=queue, n_brick_quad_points=100,
                 adaptive_level=False, use_symmetry=False,
                 alpha=0.1, nlevels=n_brick_levels)
             nftable_dx_list.append(tb)
 
         if 1:
-            print("Getting table Dy at level", l)
+            print("Getting table Dy at level", level)
             tb, _ = tm.get_table(dim, "Laplace-Dy", q_order,
-                source_box_level=l, compute_method="DrosteSum",
+                source_box_level=level, compute_method="DrosteSum",
                 queue=queue, n_brick_quad_points=100,
                 adaptive_level=False, use_symmetry=False,
                 alpha=0.1, nlevels=n_brick_levels)
@@ -298,35 +293,35 @@ if use_multilevel_table:
             }
 
 else:
-        if 1:
-            print("Getting table")
-            tb, _ = tm.get_table(dim, "Laplace", q_order,
-                compute_method="DrosteSum",
-                queue=queue, n_brick_quad_points=100,
-                adaptive_level=False, use_symmetry=True,
-                alpha=0.1, nlevels=n_brick_levels)
+    if 1:
+        print("Getting table")
+        tb, _ = tm.get_table(dim, "Laplace", q_order,
+            compute_method="DrosteSum",
+            queue=queue, n_brick_quad_points=100,
+            adaptive_level=False, use_symmetry=True,
+            alpha=0.1, nlevels=n_brick_levels)
 
-        if 1:
-            print("Getting table Dx")
-            tb_dx, _ = tm.get_table(dim, "Laplace-Dx", q_order,
-                compute_method="DrosteSum",
-                queue=queue, n_brick_quad_points=100,
-                adaptive_level=False, use_symmetry=False,
-                alpha=0.1, nlevels=n_brick_levels)
+    if 1:
+        print("Getting table Dx")
+        tb_dx, _ = tm.get_table(dim, "Laplace-Dx", q_order,
+            compute_method="DrosteSum",
+            queue=queue, n_brick_quad_points=100,
+            adaptive_level=False, use_symmetry=False,
+            alpha=0.1, nlevels=n_brick_levels)
 
-        if 1:
-            print("Getting table Dy")
-            tb_dy, _ = tm.get_table(dim, "Laplace-Dy", q_order,
-                compute_method="DrosteSum",
-                queue=queue, n_brick_quad_points=100,
-                adaptive_level=False, use_symmetry=False,
-                alpha=0.1, nlevels=n_brick_levels)
+    if 1:
+        print("Getting table Dy")
+        tb_dy, _ = tm.get_table(dim, "Laplace-Dy", q_order,
+            compute_method="DrosteSum",
+            queue=queue, n_brick_quad_points=100,
+            adaptive_level=False, use_symmetry=False,
+            alpha=0.1, nlevels=n_brick_levels)
 
-        nftable = {
-                tb.integral_knl.__repr__(): tb,
-                tb_dx.integral_knl.__repr__(): tb_dx,
-                tb_dy.integral_knl.__repr__(): tb_dy,
-                }
+    nftable = {
+            tb.integral_knl.__repr__(): tb,
+            tb_dx.integral_knl.__repr__(): tb_dx,
+            tb_dy.integral_knl.__repr__(): tb_dy,
+            }
 
 # }}} End build near field potential table
 
@@ -502,19 +497,17 @@ if 0:
 
     print("P2P Error =", np.max(np.abs(ze - zds)))
 
-    """
-    import matplotlib.pyplot as plt
-    import matplotlib.cm as cm
-    x = q_points[0].get()
-    y = q_points[1].get()
-    plt.scatter(x, y, c=np.log(abs(zs-zds)) / np.log(10), cmap=cm.jet)
-    plt.colorbar()
+    # import matplotlib.pyplot as plt
+    # import matplotlib.cm as cm
+    # x = q_points[0].get()
+    # y = q_points[1].get()
+    # plt.scatter(x, y, c=np.log(abs(zs-zds)) / np.log(10), cmap=cm.jet)
+    # plt.colorbar()
 
-    plt.xlabel("Multipole order = " + str(m_order))
+    # plt.xlabel("Multipole order = " + str(m_order))
 
-    plt.draw()
-    plt.show()
-    """
+    # plt.draw()
+    # plt.show()
 
 # Scatter plot
 if 0:
@@ -528,7 +521,7 @@ if 0:
     ax.scatter(x, y, zs_dx, s=1)
     ax.scatter(x, y, ze_dx, s=1)
     # ax.scatter(x, y, source_field([q.get() for q in q_points]), s=1)
-    import matplotlib.cm as cm
+    # import matplotlib.cm as cm
 
     # ax.scatter(x, y, zs, c=np.log(abs(zs-zds)), cmap=cm.jet)
     # plt.gca().set_aspect("equal")
@@ -543,5 +536,3 @@ if 0:
     # plt.savefig("exact.png")
 
 # }}} End postprocess and plot
-
-# vim: filetype=pyopencl:foldmethod=marker

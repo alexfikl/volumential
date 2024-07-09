@@ -100,7 +100,7 @@ class DrosteBase(KernelCacheWrapper):
             [
                 1
                 if int(max(abs(np.array(vec)))) == 0
-                else max([abs(cvc) - 0.5 for cvc in np.array(vec) / 4]) * 2
+                else max(abs(cvc) - 0.5 for cvc in np.array(vec) / 4) * 2
                 for vec in case_vecs
             ]
         )
@@ -474,7 +474,7 @@ class DrosteBase(KernelCacheWrapper):
     def get_kernel_code(self):
         return [
             self.make_dim_independent(
-                """  # noqa: E501
+                """
         for iaxis
             <> root_center[iaxis] = 0.5 * (
                     root_brick[iaxis, 1] + root_brick[iaxis, 0]) {dup=iaxis}
@@ -656,7 +656,8 @@ class DrosteBase(KernelCacheWrapper):
                     *  knl_scaling
                 ) {id=result,dep=jac:mpoint:density:finish_kval}
         end
-        """)
+        """  # noqa: E501
+        )
         ]
 
     def get_target_points(self, queue=None):
@@ -849,8 +850,7 @@ class DrosteFull(DrosteBase):
 
             warn(
                 "Droste probably has too few levels, missing measure = "
-                + str(missing_measure)
-            )
+                f"{missing_measure}", stacklevel=2)
 
         if "result_array" in kwargs:
             result_array = kwargs["result_array"]
@@ -868,7 +868,7 @@ class DrosteFull(DrosteBase):
         t = np.array([pt[-1] for pt in q_points[: self.ntgt_points]])
 
         knl = self.get_cached_optimized_kernel()
-        evt, res = knl(
+        _, res = knl(
             queue, alpha=alpha, result=result_array,
             root_brick=root_brick,
             target_nodes=t.astype(np.float64, copy=True),
@@ -1363,7 +1363,7 @@ class DrosteReduced(DrosteBase):
         except Exception:  # noqa: B902
             pass
         knl = self.get_cached_optimized_kernel()
-        evt, res = knl(
+        _, res = knl(
             queue, alpha=alpha, result=result_array,
             root_brick=root_brick,
             target_nodes=t.astype(np.float64, copy=True),
@@ -1381,7 +1381,7 @@ class DrosteReduced(DrosteBase):
         except Exception:  # noqa: B902
             pass
         knl2 = self.get_cached_optimized_kernel()
-        evt, res2 = knl2(
+        _, res2 = knl2(
             queue,
             result=raw_cheb_table_case,
             n_cases=1,
@@ -1625,7 +1625,7 @@ class InverseDrosteReduced(DrosteReduced):
             self.reduce_by_symmetry.reduced_vecs[self.current_base_case][d] == 0
             for d in range(self.dim))
 
-        code = """  # noqa: E501
+        code = """
             <> T0_tgt_IAXIS = 1
             <> T1_tgt_IAXIS = template_true_target[IAXIS] {dep=template_true_targets}
             <> Tprev_tgt_IAXIS = T0_tgt_IAXIS {id=t0_tgt_IAXIS}
@@ -1645,7 +1645,7 @@ class InverseDrosteReduced(DrosteReduced):
                     if(fIAXIS >= 2 and fIAXIS == pIAXIS + 2, Tcur_tgt_IAXIS, 0))
 
                 ) {id=tgtbasisIAXIS,dep=tcur_tgt_updateIAXIS}
-            """.replace(
+            """.replace(   # noqa: E501
             "IAXIS", str(iaxis)
         )
         return code
@@ -1671,7 +1671,7 @@ class InverseDrosteReduced(DrosteReduced):
             self.reduce_by_symmetry.reduced_vecs[self.current_base_case][d] == 0
             for d in range(self.dim))
 
-        code = """  # noqa: E501
+        code = """
             <> U0_tgt_IAXIS = 1
             <> U1_tgt_IAXIS = 2 * template_true_target[IAXIS] {dep=template_true_targets}
             <> Uprev_tgt_IAXIS = U0_tgt_IAXIS {id=u0_tgt_IAXIS}
@@ -1698,7 +1698,7 @@ class InverseDrosteReduced(DrosteReduced):
                     ((f_order_IAXIS + 1) * basis_tgt_evalIAXIS - basis2_tgt_evalIAXIS)
                     / (template_true_target[IAXIS]**2 - 1)
                 ) * (2**2) / (root_extent[IAXIS]**2) {id=tgtd2basisIAXIS,dep=tgtbasisIAXIS:tgtbasis2IAXIS}
-            """.replace(
+            """.replace(  # noqa: E501
                     "IAXIS", str(iaxis)
                     )
         return code
@@ -2103,8 +2103,7 @@ class InverseDrosteReduced(DrosteReduced):
 
             warn(
                 "Droste probably has too few levels, missing measure = "
-                + str(missing_measure)
-            )
+                f"{missing_measure}", stacklevel=2)
 
         if "result_array" in kwargs:
             result_array = kwargs["result_array"]
@@ -2137,7 +2136,7 @@ class InverseDrosteReduced(DrosteReduced):
             pass
         knl = self.get_cached_optimized_kernel()
         result_array_0 = self.make_result_array(**kwargs)
-        evt0, res0 = knl(
+        _, res0 = knl(
             queue,
             alpha=alpha, delta=delta,
             result=result_array_0,
@@ -2160,7 +2159,7 @@ class InverseDrosteReduced(DrosteReduced):
             pass
         result_array_1 = self.make_result_array(**kwargs)
         knl = self.get_cached_optimized_kernel()
-        evt1, res1 = knl(
+        _, res1 = knl(
             queue,
             alpha=alpha, delta=delta,
             result=result_array_1,
@@ -2184,7 +2183,7 @@ class InverseDrosteReduced(DrosteReduced):
         knl2 = self.get_cached_optimized_kernel()
         result_array = res0["result"] + res1["result"]
 
-        evt2, res2 = knl2(
+        _, res2 = knl2(
             queue,
             result=result_array,
             n_cases=1,

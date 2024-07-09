@@ -29,9 +29,6 @@ import logging
 
 import numpy as np
 import pyopencl as cl
-import boxtree as bt
-import sumpy as sp
-import volumential as vm
 
 import pymbolic as pmbl
 import pymbolic.functions
@@ -232,11 +229,11 @@ if use_multilevel_table:
     nftable_dx_list = []
     nftable_dy_list = []
     nftable_dz_list = []
-    for l in range(0, tree.nlevels + 1):
+    for level in range(0, tree.nlevels + 1):
         if 1:
-            print("Getting table at level", l)
+            print("Getting table at level", level)
             tb, _ = tm.get_table(dim, "Laplace", q_order,
-                source_box_level=l, compute_method="DrosteSum",
+                source_box_level=level, compute_method="DrosteSum",
                 queue=queue, n_brick_quad_points=120,
                 adaptive_level=False, use_symmetry=True,
                 alpha=0, n_levels=1,
@@ -244,21 +241,21 @@ if use_multilevel_table:
             nftable_list.append(tb)
 
         if 1:
-            print("Getting table Dx at level", l)
+            print("Getting table Dx at level", level)
             tb, _ = tm.get_table(dim, "Laplace-Dx", q_order,
-                source_box_level=l, compute_method="DrosteSum",
+                source_box_level=level, compute_method="DrosteSum",
                 queue=queue, n_brick_quad_points=120,
                 adaptive_level=False, use_symmetry=False,
                 alpha=0, n_levels=1,
             )
             nftable_dx_list.append(tb)
 
-    print("Using table list of length", len(nftable))
     nftable = {
             nftable_list[0].integral_knl.__repr__(): nftable_list,
             nftable_dx_list[0].integral_knl.__repr__(): nftable_dx_list,
             # nftable_dy_list[0].integral_knl.__repr__(): nftable_dy_list,
             }
+    print("Using table list of length", len(nftable))
 
 else:
     logger.info("Using single level table")

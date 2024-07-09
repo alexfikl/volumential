@@ -102,8 +102,10 @@ class NearFieldInteractionTableManager:
                 self.datafile = hdf.File(self.filename, "a")
             except OSError as e:
                 from warnings import warn
-                warn("Trying to open in read/write mode failed: %s" % str(e))
-                warn("Opening table dataset %s in read-only mode." % self.filename)
+                warn(f"Trying to open in read/write mode failed: {e}",
+                     stacklevel=2)
+                warn(f"Opening table dataset '{self.filename}' in read-only mode.",
+                     stacklevel=2)
                 self.datafile = hdf.File(self.filename, "r")
         elif read_only:
             self.datafile = hdf.File(self.filename, "r")
@@ -263,13 +265,8 @@ class NearFieldInteractionTableManager:
 
                                 warn(
                                     "Table data loaded with a different value "
-                                    + kkey
-                                    + " = "
-                                    + str(tbval)
-                                    + " (expected "
-                                    + str(kval)
-                                    + ")"
-                                )
+                                    f"{kkey} = {tbval} (expected {kval})",
+                                    stacklevel=2)
                         else:
                             assert isinstance(kval, (float, complex))
                             tbval = kval.__class__(tbval)
@@ -278,13 +275,8 @@ class NearFieldInteractionTableManager:
 
                                 warn(
                                     "Table data loaded with a different value "
-                                    + kkey
-                                    + " = "
-                                    + str(tbval)
-                                    + " (expected "
-                                    + str(kval)
-                                    + ")"
-                                )
+                                    f"{kkey} = {tbval} (expected {kval})",
+                                    stacklevel=2)
 
                     except AttributeError as e:
                         strict_loading = False
@@ -304,7 +296,7 @@ class NearFieldInteractionTableManager:
                                 "are stored in the cache. "
                                 "Also, some parameters related to method for "
                                 "table building are not critical for "
-                                "consistency."
+                                "consistency.", stacklevel=2
                             )
                             print(e)
 
@@ -359,7 +351,8 @@ class NearFieldInteractionTableManager:
         else:
             from warnings import warn
 
-            warn("Unsupported compute_method: ", compute_method)
+            warn(f"Unsupported compute_method: '{compute_method}'",
+                 stacklevel=2)
             knl_func = None
             sumpy_knl = None
 

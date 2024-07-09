@@ -596,9 +596,8 @@ class NearFieldInteractionTable:
             new_size = 1
         else:
             new_size = (
-                max([abs(cvc) - 2
-                     for cvc in self.interaction_case_vecs[case_index]
-                     ]) / 2
+                max(abs(cvc) - 2 for cvc in self.interaction_case_vecs[case_index])
+                / 2
             )
 
         # print(vec, new_cntr, new_size)
@@ -662,7 +661,7 @@ class NearFieldInteractionTable:
                     x - target_point[0], y - target_point[1]
                 )
 
-            integral, error = squad.box_quad(
+            integral, _ = squad.box_quad(
                 func=integrand,
                 a=0,
                 b=self.source_box_extent,
@@ -1157,7 +1156,7 @@ class NearFieldInteractionTable:
         else:
             raise NotImplementedError()
 
-        dimtags_ints, dimtags_map_ints = gmsh.model.occ.cut(
+        _dimtags_ints, _dimtags_map_ints = gmsh.model.occ.cut(
                 objectDimTags=[(self.dim, tag_ball)],
                 toolDimTags=[(self.dim, tag_box)],
                 tag=-1, removeObject=True, removeTool=True)
@@ -1291,7 +1290,7 @@ class NearFieldInteractionTable:
         int_vals = []
 
         for target in self.q_points:
-            evt, res = lpknl(queue, quad_points=nodes, target_point=target)
+            _, res = lpknl(queue, quad_points=nodes, target_point=target)
             knl_vals = res["result"]
 
             integ = bind(discr,

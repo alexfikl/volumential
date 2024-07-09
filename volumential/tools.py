@@ -295,7 +295,7 @@ class ScalarFieldExpressionEvaluation(KernelCacheWrapper):
         if self.preamble_generators is not None:
             knl = lp.register_preamble_generators(knl, self.preamble_generators)
 
-        evt, res = knl(
+        _, res = knl(
             queue,
             target_points=target_points,
             n_targets=n_tgt_points,
@@ -516,7 +516,7 @@ class DiscreteLegendreTransform(BoxSpecificMap):
 
         knl = self.get_cached_optimized_kernel()
 
-        evt, res = knl(
+        _, res = knl(
             queue,
             boxes=traversal.target_boxes,
             box_node_starts=traversal.tree.box_target_starts,
@@ -661,7 +661,7 @@ class BoxSum(BoxSpecificReduction):
         knl = self.get_cached_optimized_kernel()
         n_boxes = traversal.target_boxes.shape[0]
 
-        evt, res = knl(
+        _, res = knl(
             queue,
             boxes=traversal.target_boxes,
             box_node_starts=traversal.tree.box_target_starts,

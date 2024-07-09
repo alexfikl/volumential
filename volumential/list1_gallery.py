@@ -156,7 +156,7 @@ def postprocess_interactions(near_neighbor_interactions):
         unique_interaction_vectors.add(tuple(tbox.center - sbox.center))
 
     # Add interactions within the same box
-    tb0, wb0 = near_neighbor_interactions[0]
+    tb0, _wb0 = near_neighbor_interactions[0]
     unique_interaction_vectors.add(tuple(tb0.center - tb0.center))
 
     list1_interactions = sorted(unique_interaction_vectors)

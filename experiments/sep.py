@@ -143,7 +143,6 @@ def main():
     q_weights = cl.array.to_device(queue, q_weights)
     # q_radii = cl.array.to_device(queue, q_radii)
 
-
     src_q_points = src_mesh.get_q_points()
     src_q_points = np.ascontiguousarray(np.transpose(src_q_points))
     src_q_points = make_obj_array(
@@ -215,12 +214,12 @@ def main():
 
     if download_table and (not os.path.isfile(table_filename)):
         import json
-        with open("table_urls.json", 'r') as fp:
+        with open("table_urls.json", "r") as fp:
             urls = json.load(fp)
 
-        print("Downloading table from %s" % urls['Laplace2D'])
+        print("Downloading table from %s" % urls["Laplace2D"])
         import subprocess
-        subprocess.call(["wget", "-q", urls['Laplace2D'], table_filename])
+        subprocess.call(["wget", "-q", urls["Laplace2D"], table_filename])
 
     tm = NearFieldInteractionTableManager(
         table_filename, root_extent=root_table_source_extent,
@@ -234,13 +233,13 @@ def main():
                 - (b - a))
             < 1e-15)
         nftable = []
-        for l in range(0, tree.nlevels + 1):
-            print("Getting table at level", l)
+        for level in range(0, tree.nlevels + 1):
+            print("Getting table at level", level)
             tb, _ = tm.get_table(
                 dim,
                 "Laplace",
                 q_order,
-                source_box_level=l,
+                source_box_level=level,
                 compute_method="DrosteSum",
                 queue=queue,
                 n_brick_quad_points=100,
@@ -477,8 +476,5 @@ def main():
     # }}} End postprocess and plot
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     main()
-
-
-# vim: filetype=pyopencl:foldmethod=marker

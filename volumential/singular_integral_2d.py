@@ -53,7 +53,6 @@ def update_qquad_leggauss_formula(deg1, deg2):
     x2 = (x2 + 1) / 2
     w2 = w2 / 2
 
-    quad_points_x, quad_points_y = np.meshgrid(x1, x2)
     ww1, ww2 = np.meshgrid(w1, w2)
     global quad_weights
     quad_weights = ww1 * ww2
@@ -233,7 +232,7 @@ def solve_affine_map_2d(source_tria, target_tria):
         print("")
         print("source:", source_tria)
         print("target:", target_tria)
-        raise SystemExit("Error: Singular source triangle encountered")
+        raise SystemExit("Error: Singular source triangle encountered") from None
     assert len(x) == 6
     assert np.allclose(np.dot(coef, x), rhs)
 

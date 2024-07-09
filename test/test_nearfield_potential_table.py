@@ -50,7 +50,7 @@ def interp_modes(q_order):
     modes = [table.get_mode(i) for i in range(table.n_q_points)]
 
     def interpolate_function(x, y):
-        return sum([mode(x, y) for mode in modes])
+        return sum(mode(x, y) for mode in modes)
 
     h = 0.2
     xx = yy = np.arange(-1.0, 1.0, h)

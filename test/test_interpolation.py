@@ -96,7 +96,7 @@ def drive_test_from_meshmode_interpolation(
     boxgeo = boxfmm_fac(queue)
     lookup_fac = ElementsToSourcesLookupBuilder(
             cl_ctx, tree=boxgeo.tree, discr=discr)
-    lookup, evt = lookup_fac(queue)
+    lookup, _ = lookup_fac(queue)
 
     if test_case == "exact":
         # algebraically exact interpolation
@@ -153,7 +153,7 @@ def drive_test_to_meshmode_interpolation(
     boxgeo = boxfmm_fac(queue)
     lookup_fac = LeavesToNodesLookupBuilder(
             cl_ctx, trav=boxgeo.trav, discr=discr)
-    lookup, evt = lookup_fac(queue)
+    lookup, _ = lookup_fac(queue)
 
     if test_case == "exact":
         # algebraically exact interpolation

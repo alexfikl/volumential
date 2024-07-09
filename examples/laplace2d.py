@@ -189,7 +189,7 @@ def main():
     )
 
     bbox2 = np.array([[a, b], [a, b]])
-    tree2, _ = tb(
+    _tree2, _ = tb(
         queue,
         particles=q_points,
         targets=q_points,

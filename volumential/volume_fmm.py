@@ -205,7 +205,7 @@ def drive_volume_fmm(traversal, expansion_wrangler, src_weights, src_func,
             p2p_extra_kwargs.update(wrangler.kernel_extra_kwargs)
 
         for iw, sw in enumerate(src_weights):
-            evt, (ref_pot,) = p2p(
+            _, (ref_pot,) = p2p(
                 wrangler.queue,
                 traversal.tree.targets,
                 traversal.tree.sources,

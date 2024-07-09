@@ -353,7 +353,8 @@ class ElementsToSourcesLookupBuilder:
             if isinstance(actx, cl.CommandQueue):
                 from warnings import warn
                 warn("Command queue passed to the interpolator. "
-                     "Supply an array context to enable proper caching.")
+                     "Supply an array context to enable proper caching.",
+                     stacklevel=2)
                 actx = PyOpenCLArrayContext(actx)
             else:
                 raise ValueError
@@ -386,7 +387,8 @@ class ElementsToSourcesLookupBuilder:
             if isinstance(actx, cl.CommandQueue):
                 from warnings import warn
                 warn("Command queue passed to the interpolator. "
-                     "Supply an array context to enable proper caching.")
+                     "Supply an array context to enable proper caching.",
+                     stacklevel=2)
                 actx = PyOpenCLArrayContext(actx)
             else:
                 raise ValueError
@@ -497,7 +499,8 @@ class LeavesToNodesLookupBuilder:
             if isinstance(actx, cl.CommandQueue):
                 from warnings import warn
                 warn("Command queue passed to the interpolator. "
-                     "Supply an array context to enable proper caching.")
+                     "Supply an array context to enable proper caching.",
+                     stacklevel=2)
                 actx = PyOpenCLArrayContext(actx)
             else:
                 raise ValueError
@@ -598,7 +601,8 @@ def interpolate_from_meshmode(actx, dof_vec, elements_to_sources_lookup,
         if isinstance(actx, cl.CommandQueue):
             from warnings import warn
             warn("Command queue passed to the interpolator. "
-                 "Supply an array context to enable proper caching.")
+                 "Supply an array context to enable proper caching.",
+                 stacklevel=2)
             actx = PyOpenCLArrayContext(actx)
         else:
             raise ValueError
@@ -741,7 +745,8 @@ def interpolate_to_meshmode(actx, potential, leaves_to_nodes_lookup,
         if isinstance(actx, cl.CommandQueue):
             from warnings import warn
             warn("Command queue passed to the interpolator. "
-                 "Supply an array context to enable proper caching.")
+                 "Supply an array context to enable proper caching.",
+                 stacklevel=2)
             actx = PyOpenCLArrayContext(actx)
         else:
             raise ValueError

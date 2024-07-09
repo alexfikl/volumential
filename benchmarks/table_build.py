@@ -46,7 +46,7 @@ def bench_table_build(queue):
 
     queue.finish()
     t0 = time.time()
-    nftable, _ = tm.get_table(
+    _nftable, _ = tm.get_table(
         dim,
         "Laplace",
         q_order,

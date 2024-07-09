@@ -32,7 +32,7 @@ from volumential.version import VERSION_TEXT
 
 volumential_version = VERSION_TEXT
 
-__all__ = ["volumential_version", "box_quad", "nearfield_potential_table"]
+__all__ = ["volumential_version", "box_quad"]
 
 __doc__ = """
 :mod:`volumential` can compute 2/3D volume potentials using FMM.
