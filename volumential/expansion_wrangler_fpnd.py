@@ -29,13 +29,21 @@ import pyopencl.array
 from boxtree.pyfmmlib_integration import FMMLibExpansionWrangler
 from pytools.obj_array import make_obj_array
 from sumpy.fmm import (
-    SumpyExpansionWrangler, SumpyExpansionWranglerCodeContainer, SumpyTimingFuture)
+    SumpyExpansionWrangler,
+    SumpyExpansionWranglerCodeContainer,
+    SumpyTimingFuture,
+)
 from sumpy.kernel import (
-    AxisTargetDerivative, DirectionalSourceDerivative, HelmholtzKernel,
-    LaplaceKernel)
+    AxisTargetDerivative,
+    DirectionalSourceDerivative,
+    HelmholtzKernel,
+    LaplaceKernel,
+)
 
 from volumential.expansion_wrangler_interface import (
-    ExpansionWranglerCodeContainerInterface, ExpansionWranglerInterface)
+    ExpansionWranglerCodeContainerInterface,
+    ExpansionWranglerInterface,
+)
 from volumential.nearfield_potential_table import NearFieldInteractionTable
 
 

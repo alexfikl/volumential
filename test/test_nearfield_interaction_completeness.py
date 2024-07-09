@@ -141,7 +141,9 @@ def drive_test_completeness(ctx, queue, dim, q_order):
     mpole_expn_class = partial(VolumeTaylorMultipoleExpansion, use_rscale=None)
 
     from volumential.expansion_wrangler_fpnd import (
-        FPNDExpansionWrangler, FPNDExpansionWranglerCodeContainer)
+        FPNDExpansionWrangler,
+        FPNDExpansionWranglerCodeContainer,
+    )
 
     wcc = FPNDExpansionWranglerCodeContainer(
         ctx,

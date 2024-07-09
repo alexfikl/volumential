@@ -480,7 +480,9 @@ class NearFieldInteractionTableManager:
 
         elif kernel_type == "Cahn-Hilliard-Laplacian":
             from sumpy.kernel import (
-                FactorizedBiharmonicKernel, LaplacianTargetDerivative)
+                FactorizedBiharmonicKernel,
+                LaplacianTargetDerivative,
+            )
 
             return LaplacianTargetDerivative(FactorizedBiharmonicKernel(dim))
 
@@ -491,8 +493,10 @@ class NearFieldInteractionTableManager:
 
         elif kernel_type == "Cahn-Hilliard-Laplacian-Dx":
             from sumpy.kernel import (
-                AxisTargetDerivative, FactorizedBiharmonicKernel,
-                LaplacianTargetDerivative)
+                AxisTargetDerivative,
+                FactorizedBiharmonicKernel,
+                LaplacianTargetDerivative,
+            )
 
             return AxisTargetDerivative(
                 0, LaplacianTargetDerivative(FactorizedBiharmonicKernel(dim))
@@ -500,8 +504,10 @@ class NearFieldInteractionTableManager:
 
         elif kernel_type == "Cahn-Hilliard-Laplacian-Dy":
             from sumpy.kernel import (
-                AxisTargetDerivative, FactorizedBiharmonicKernel,
-                LaplacianTargetDerivative)
+                AxisTargetDerivative,
+                FactorizedBiharmonicKernel,
+                LaplacianTargetDerivative,
+            )
 
             return AxisTargetDerivative(
                 1, LaplacianTargetDerivative(FactorizedBiharmonicKernel(dim))

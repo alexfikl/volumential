@@ -29,7 +29,8 @@ import pyopencl as cl
 import pyopencl.clmath
 from meshmode.discretization import Discretization
 from meshmode.discretization.poly_element import (
-    InterpolatoryQuadratureSimplexGroupFactory)
+    InterpolatoryQuadratureSimplexGroupFactory,
+)
 from pytential.target import PointsTarget
 
 from volumential.function_extension import compute_harmonic_extension

@@ -1,6 +1,7 @@
 # Use this script to pre-compute nftables
 from __future__ import absolute_import, division, print_function
 
+
 __copyright__ = "Copyright (C) 2017 - 2018 Xiaoyu Wei"
 
 __license__ = """
@@ -24,23 +25,28 @@ THE SOFTWARE.
 """
 
 import logging
+
+
 logger = logging.getLogger(__name__)
 verbose = False
 if verbose:
     logging.basicConfig(level=logging.INFO)
 
 import numpy as np
-import pyopencl as cl
-import boxtree as bt  # noqa: F401
-import sumpy as sp  # noqa: F401
-import volumential as vm  # noqa: F401
 
+import boxtree as bt  # noqa: F401
+import pyopencl as cl
+import sumpy as sp  # noqa: F401
+
+import volumential as vm  # noqa: F401
 from volumential.table_manager import NearFieldInteractionTableManager
+
 
 ctx = cl.create_some_context(interactive=True)
 queue = cl.CommandQueue(ctx)
 
 from time import time
+
 
 dim = 3
 last_cvg_order = 35

@@ -3,6 +3,7 @@
 """
 from __future__ import absolute_import, division, print_function
 
+
 __copyright__ = "Copyright (C) 2019 Xiaoyu Wei"
 
 __license__ = """
@@ -27,6 +28,7 @@ THE SOFTWARE.
 
 import logging
 
+
 logger = logging.getLogger(__name__)
 
 if 1:
@@ -36,10 +38,12 @@ else:
     # clean
     logging.basicConfig(level=logging.CRITICAL)
 
+from functools import partial
+
 import numpy as np
+
 import pyopencl as cl
 
-from functools import partial
 
 print("*************************")
 print("* Setting up...")
@@ -129,6 +133,7 @@ queue = cl.CommandQueue(ctx)
 
 import volumential.meshgen as mg
 
+
 # Show meshgen info
 mg.greet()
 
@@ -167,6 +172,7 @@ q_points = np.ascontiguousarray(np.transpose(q_points))
 
 from pytools.obj_array import make_obj_array
 
+
 q_points = make_obj_array([cl.array.to_device(queue, q_points[i]) for i in range(dim)])
 
 q_weights = cl.array.to_device(queue, q_weights)
@@ -188,12 +194,15 @@ source_vals = cl.array.to_device(
 
 from boxtree.tools import AXIS_NAMES
 
+
 axis_names = AXIS_NAMES[:dim]
 
 from pytools import single_valued
 
+
 coord_dtype = single_valued(coord.dtype for coord in q_points)
 from boxtree.bounding_box import make_bounding_box_dtype
+
 
 bbox_type, _ = make_bounding_box_dtype(ctx.devices[0], dim, coord_dtype)
 bbox = np.empty(1, bbox_type)
@@ -206,6 +215,7 @@ for ax in axis_names:
 # TODO: use points from FieldPlotter are used as target points for better
 # visuals
 from boxtree import TreeBuilder
+
 
 tb = TreeBuilder(ctx)
 tree, _ = tb(
@@ -229,6 +239,7 @@ tree2, _ = tb(
 
 from boxtree.traversal import FMMTraversalBuilder
 
+
 tg = FMMTraversalBuilder(ctx)
 trav, _ = tg(queue, tree)
 
@@ -237,6 +248,7 @@ trav, _ = tg(queue, tree)
 # {{{ build near field potential table
 
 from volumential.table_manager import NearFieldInteractionTableManager
+
 
 tm = NearFieldInteractionTableManager(
     table_filename, root_extent=root_table_source_extent
@@ -328,7 +340,8 @@ else:
 # {{{ sumpy expansion for laplace kernel
 
 from sumpy.expansion import DefaultExpansionFactory
-from sumpy.kernel import LaplaceKernel, AxisTargetDerivative
+from sumpy.kernel import AxisTargetDerivative, LaplaceKernel
+
 
 knl = LaplaceKernel(dim)
 knl_dx = AxisTargetDerivative(0, knl)
@@ -341,8 +354,10 @@ out_kernels = [knl, knl_dx, knl_dy]
 
 exclude_self = True
 from volumential.expansion_wrangler_fpnd import (
+    FPNDExpansionWrangler,
     FPNDExpansionWranglerCodeContainer,
-    FPNDExpansionWrangler)
+)
+
 
 wcc = FPNDExpansionWranglerCodeContainer(
     ctx,
@@ -377,9 +392,11 @@ print("*************************")
 
 # {{{ conduct fmm computation
 
+import time
+
 from volumential.volume_fmm import drive_volume_fmm
 
-import time
+
 queue.finish()
 
 t0 = time.time()

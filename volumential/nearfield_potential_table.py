@@ -1115,7 +1115,8 @@ class NearFieldInteractionTable:
         from meshmode.array_context import PyOpenCLArrayContext
         from meshmode.discretization import Discretization
         from meshmode.discretization.poly_element import (
-            PolynomialWarpAndBlendGroupFactory)
+            PolynomialWarpAndBlendGroupFactory,
+        )
         from meshmode.dof_array import flatten, thaw
         from meshmode.mesh.io import read_gmsh
 

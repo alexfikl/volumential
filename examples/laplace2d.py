@@ -283,7 +283,9 @@ def main():
     exclude_self = True
 
     from volumential.expansion_wrangler_fpnd import (
-        FPNDExpansionWrangler, FPNDExpansionWranglerCodeContainer)
+        FPNDExpansionWrangler,
+        FPNDExpansionWranglerCodeContainer,
+    )
 
     wcc = FPNDExpansionWranglerCodeContainer(
         ctx,

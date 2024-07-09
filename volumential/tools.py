@@ -27,8 +27,7 @@ import numpy as np
 import loopy as lp
 import pymbolic as pmbl
 import pyopencl as cl
-from pymbolic.primitives import (
-    Expression as ExpressionType, Variable as VariableType)
+from pymbolic.primitives import Expression as ExpressionType, Variable as VariableType
 from pytools import memoize_method
 
 

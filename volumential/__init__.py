@@ -24,7 +24,8 @@ import os
 from pytools.persistent_dict import WriteOncePersistentDict
 
 from volumential.nearfield_potential_table import (  # noqa: F401
-    NearFieldInteractionTable)
+    NearFieldInteractionTable,
+)
 from volumential.singular_integral_2d import box_quad
 from volumential.table_manager import NearFieldInteractionTableManager  # noqa: F401
 from volumential.version import VERSION_TEXT

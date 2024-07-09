@@ -214,10 +214,12 @@ def laplace_problem(ctx_factory):
     # {{{ sumpy expansion for laplace kernel
 
     from sumpy.expansion.local import LinearPDEConformingVolumeTaylorLocalExpansion
+
     # from sumpy.expansion.multipole import VolumeTaylorMultipoleExpansion
     # from sumpy.expansion.local import VolumeTaylorLocalExpansion
     from sumpy.expansion.multipole import (
-        LinearPDEConformingVolumeTaylorMultipoleExpansion)
+        LinearPDEConformingVolumeTaylorMultipoleExpansion,
+    )
     from sumpy.kernel import LaplaceKernel
 
     knl = LaplaceKernel(dim)
@@ -229,7 +231,9 @@ def laplace_problem(ctx_factory):
 
     exclude_self = True
     from volumential.expansion_wrangler_fpnd import (
-        FPNDExpansionWrangler, FPNDExpansionWranglerCodeContainer)
+        FPNDExpansionWrangler,
+        FPNDExpansionWranglerCodeContainer,
+    )
 
     wcc = FPNDExpansionWranglerCodeContainer(
         ctx,

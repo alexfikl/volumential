@@ -34,7 +34,9 @@ from boxtree.fmm import TimingRecorder
 from pytools.obj_array import make_obj_array
 
 from volumential.expansion_wrangler_fpnd import (
-    FPNDFMMLibExpansionWrangler, FPNDSumpyExpansionWrangler)
+    FPNDFMMLibExpansionWrangler,
+    FPNDSumpyExpansionWrangler,
+)
 from volumential.expansion_wrangler_interface import ExpansionWranglerInterface
 
 

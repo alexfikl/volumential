@@ -294,7 +294,9 @@ def main():
 
     exclude_self = True
     from volumential.expansion_wrangler_fpnd import (
-        FPNDExpansionWrangler, FPNDExpansionWranglerCodeContainer)
+        FPNDExpansionWrangler,
+        FPNDExpansionWranglerCodeContainer,
+    )
 
     wcc = FPNDExpansionWranglerCodeContainer(
         ctx,
@@ -428,7 +430,8 @@ def main():
         from meshmode.array_context import PyOpenCLArrayContext
         from meshmode.discretization import Discretization
         from meshmode.discretization.poly_element import (
-            LegendreGaussLobattoTensorProductGroupFactory)
+            LegendreGaussLobattoTensorProductGroupFactory,
+        )
 
         actx = PyOpenCLArrayContext(queue)
         box_discr = Discretization(

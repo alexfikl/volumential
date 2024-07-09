@@ -31,8 +31,11 @@ from meshmode.mesh.generation import generate_regular_rect_mesh
 
 from volumential.geometry import BoundingBoxFactory, BoxFMMGeometryFactory
 from volumential.interpolation import (
-    ElementsToSourcesLookupBuilder, LeavesToNodesLookupBuilder,
-    interpolate_from_meshmode, interpolate_to_meshmode)
+    ElementsToSourcesLookupBuilder,
+    LeavesToNodesLookupBuilder,
+    interpolate_from_meshmode,
+    interpolate_to_meshmode,
+)
 
 
 # {{{ test data

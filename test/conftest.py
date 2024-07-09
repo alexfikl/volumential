@@ -29,7 +29,8 @@ from filelock import FileLock
 
 # setup the ctx_factory fixture
 from pyopencl.tools import (  # noqa: F401
-    pytest_generate_tests_for_pyopencl as pytest_generate_tests)
+    pytest_generate_tests_for_pyopencl as pytest_generate_tests,
+)
 
 from volumential.table_manager import NearFieldInteractionTableManager as NFTManager
 
